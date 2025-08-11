@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const ScheduleSlotSchema = new mongoose.Schema({
-    day: { type: String, required: true }, // e.g., "Monday"
-    duration: { type: Number, required: true, min: 1 }, // in hours
+    day: { type: String, required: true },
+    start_time: { type: String, required: true }, // e.g., "09:00"
+    duration: { type: Number, required: true, min: 1 },
 }, { _id: false });
 
 const SubjectSchema = new mongoose.Schema({

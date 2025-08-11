@@ -13,6 +13,12 @@ const UserSchema = new mongoose.Schema({
     place: { type: String, default: '' },
     year_of_study: { type: String, default: '' },
     avatar_url: { type: String, default: '' },
+    notification_preferences: {
+        classes: { type: Boolean, default: true },
+        tests: { type: Boolean, default: true },
+        assignments: { type: Boolean, default: true },
+    },
+    push_subscriptions: [mongoose.Schema.Types.Mixed],
 }, { timestamps: true });
 
 // Hash password before saving a new user or on password modification
