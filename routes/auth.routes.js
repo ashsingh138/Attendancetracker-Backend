@@ -37,6 +37,9 @@ router.post('/login', async (req, res) => {
 
         res.json({ token });
     } catch (error) {
+        // vvv ADD THIS LINE vvv
+        console.error('TOKEN SIGNING ERROR:', error); 
+        // ^^^ ADD THIS LINE ^^^
         res.status(500).json({ message: error.message });
     }
 });
