@@ -28,6 +28,12 @@ app.use('/api/assignments', require('./routes/assignment.routes'));
 app.use('/api/attendance', require('./routes/attendance.routes'));
 // Add this line in server.js with your other routes
 app.use('/api/notifications', require('./routes/notification.routes'));
+// Add this in server.js, after your other app.use() routes
+
+app.get('/api/cron/keep-alive', (req, res) => {
+    console.log('Keep-alive ping received.');
+    res.status(200).send('Ping successful.');
+});
 // DB Connection
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected...'))
