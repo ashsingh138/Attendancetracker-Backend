@@ -24,23 +24,43 @@ router.post('/signup', async (req, res) => {
 });
 
 // POST /api/auth/login
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
+    console.log('--- LOGIN ROUTE HIT ---');
     try {
         const { email, password } = req.body;
+        console.log('Step 1: Finding user by email:', email);
         const user = await User.findOne({ email });
-        if (!user || !(await user.comparePassword(password))) {
+
+        if (!user) {
+            console.log('Step 2: User not found. Sending 401.');
             return res.status(401).json({ message: 'Invalid email or password' });
         }
-        
+        console.log('Step 2: User found:', user.email);
+
+        console.log('Step 3: Comparing password...');
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            console.log('Step 4: Password does not match. Sending 401.');
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+        console.log('Step 4: Password matches.');
+
         const payload = { id: user._id, email: user.email };
+        
+        // This next log is very important. It checks if the secret key exists.
+        console.log('Step 5: Preparing to sign token. JWT_SECRET exists:', !!process.env.JWT_SECRET);
+        
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+        
+        console.log('Step 6: Token signed successfully.'); // If we see this, the token was created.
 
         res.json({ token });
+        console.log('Step 7: JSON response sent.');
+
     } catch (error) {
-        // vvv ADD THIS LINE vvv
-        console.error('TOKEN SIGNING ERROR:', error); 
-        // ^^^ ADD THIS LINE ^^^
-        res.status(500).json({ message: error.message });
+        console.error('--- LOGIN CATCH BLOCK ERROR ---', error);
+        res.status(500).json({ message: 'An error occurred.' });
     }
 });
 
