@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    // Profile fields are merged into the user model
+    // Profile fields
     full_name: { type: String, default: '' },
     college_name: { type: String, default: '' },
     department: { type: String, default: '' },
@@ -13,15 +13,26 @@ const UserSchema = new mongoose.Schema({
     place: { type: String, default: '' },
     year_of_study: { type: String, default: '' },
     avatar_url: { type: String, default: '' },
+    
+    // --- UPDATED PREFERENCES STRUCTURE ---
     notification_preferences: {
-        classes: { type: Boolean, default: true },
-        tests: { type: Boolean, default: true },
-        assignments: { type: Boolean, default: true },
+        classes: {
+            push: { type: Boolean, default: true },
+            email: { type: Boolean, default: true }
+        },
+        tests: {
+            push: { type: Boolean, default: true },
+            email: { type: Boolean, default: true }
+        },
+        assignments: {
+            push: { type: Boolean, default: true },
+            email: { type: Boolean, default: true }
+        }
     },
     push_subscriptions: [mongoose.Schema.Types.Mixed],
 }, { timestamps: true });
 
-// Hash password before saving a new user or on password modification
+// Hash password before saving
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
     try {
@@ -33,7 +44,7 @@ UserSchema.pre('save', async function(next) {
     }
 });
 
-// Method to compare candidate password with the stored hashed password
+// Method to compare passwords
 UserSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
