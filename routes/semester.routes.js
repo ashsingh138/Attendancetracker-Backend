@@ -23,6 +23,24 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+// --- ADDED THIS NEW ROUTE ---
+// GET /api/semesters/archived
+// Fetches all archived semesters for the logged-in user
+router.get('/archived', auth, async (req, res) => {
+    try {
+        const archivedSemesters = await Semester.find({ 
+            user_id: req.user.id, 
+            is_archived: true 
+        }).sort({ start_date: -1 }); // Sort by start date, newest first
+
+        res.json(archivedSemesters);
+    } catch (error) {
+        console.error("Error fetching archived semesters:", error);
+        res.status(500).json({ message: error.message });
+    }
+});
+// --- END OF NEW ROUTE ---
+
 // Archive a semester
 router.put('/:id/archive', auth, async (req, res) => {
     try {
