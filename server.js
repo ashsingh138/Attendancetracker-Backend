@@ -4,7 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const scheduler = require('./scheduler');
+
 const app = express();
 
 // --- START OF NEW CORS CONFIGURATION ---
@@ -27,7 +27,7 @@ app.use('/api/tests', require('./routes/test.routes'));
 app.use('/api/assignments', require('./routes/assignment.routes'));
 app.use('/api/attendance', require('./routes/attendance.routes'));
 // Add this line in server.js with your other routes
-app.use('/api/notifications', require('./routes/notification.routes'));
+
 // Add this in server.js, after your other app.use() routes
 
 app.get('/api/cron/keep-alive', (req, res) => {
@@ -38,6 +38,6 @@ app.get('/api/cron/keep-alive', (req, res) => {
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.error(err));
-scheduler.start();
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

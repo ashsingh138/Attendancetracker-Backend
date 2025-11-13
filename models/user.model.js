@@ -14,22 +14,6 @@ const UserSchema = new mongoose.Schema({
     year_of_study: { type: String, default: '' },
     avatar_url: { type: String, default: '' },
     
-    // --- UPDATED PREFERENCES STRUCTURE ---
-    notification_preferences: {
-        classes: {
-            push: { type: Boolean, default: true },
-            email: { type: Boolean, default: true }
-        },
-        tests: {
-            push: { type: Boolean, default: true },
-            email: { type: Boolean, default: true }
-        },
-        assignments: {
-            push: { type: Boolean, default: true },
-            email: { type: Boolean, default: true }
-        }
-    },
-    push_subscriptions: [mongoose.Schema.Types.Mixed],
 }, { timestamps: true });
 
 // Hash password before saving
